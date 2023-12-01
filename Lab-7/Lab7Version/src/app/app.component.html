@@ -1,0 +1,6 @@
+<div *ngIf="movies!=null; else espera">
+  <select name="pel" id="pel">
+    <option  *ngFor="let movie of movies.response" value="{{movie.slug}}">{{movie.name}}</option>
+  </select>
+</div>
+<ng-template #espera>Esperando datos...</ng-template>

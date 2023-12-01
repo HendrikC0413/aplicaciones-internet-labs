@@ -13,6 +13,13 @@
             <img src="{% static 'images/userena.svg' %}" class="rounded" style="width:200px"/>
             <h1>Ingresar nueva asignatura</h1>
         </div>
+        <div>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Guardar</button>
+            </form>
+        </div>
     </div>
 	</body>
 </html>

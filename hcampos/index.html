@@ -1,0 +1,157 @@
+<!--DOCTYPE html>
+<html>
+<head>
+
+<meta chrset="UTF 8">
+<title>Movies</title>
+<link rel="stylesheet" href="css/bootstrap.css"/>
+</head>
+<body ng-app="sampleApp">
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+<script src="lib/bootstrap.js"></script>
+
+<div ng-controller="ListaControl">
+    <h1>Lista de generos</h1>
+
+    <!-select name="movies" id="movies">
+        <option ng-repeat="x in genero" value="{{x.slug}}">
+            {{x.slug}}
+        </option>
+      </select->
+      <select name="movies2" id="movies2" ng-model="SeleccionGenero" ng-change="Cambio()" ng-options="x.slug as x.name for x in genero">
+        <option value="">
+            seleccione
+        </option>
+      </select>
+      {{Seleccionado}}
+
+      <h1> Movies</h1>
+    <table class="table table-striped">
+        <thead>
+            <tr> <th>Titulo</th><th>Descripcion</th><th>Imagen</th><th></th> </tr> 
+        </thead>
+        <tbody>
+            <tr>
+                <td>l</td><td>l</td><td>Movie 1</td>
+                <td><a href="#!Movie/1">Movie details</a></td>
+            </tr>
+            <tr ng-repeat="movie in peliculas">
+                <td>{{movie.title}}</td><td>{{movie.description}}</td><td><img src="{{movie.poster.url}}" width="150" height="200"/></td>
+                <td><a href="#!Movie/{{movie.id}}">Movie details</a></td>
+            </tr>
+        </tbody>
+    </table->
+</div>
+
+<div ng-view></div>
+
+<script>
+    var sampleApp = angular.module('sampleApp',['ngRoute']);
+    sampleApp.config(['$routeProvider',
+        function($routeProvider){
+            $routeProvider.
+                when('/Movie/:movieId',{
+                    templateUrl : 'movie.html',
+                    controller: 'MovController'
+                });
+        }
+    ]);
+    sampleApp.controller('MovController',function($scope,$routeParams) {
+        $scope.movieid=$routeParams.MovieId });
+    
+    var applist = angular.module('sampleApp',[]);
+    applist.controller('ListaControl',
+    function($scope,$http){
+        url = "http://api.filmon.com/api/vod/genres";
+        $http.get(url).then(function (response) {
+            $scope.genero = response.data.response;
+        });
+        $scope.Cambio = function(){
+            $scope.Seleccionado = $scope.SeleccionGenero;
+            url = 'http://api.filmon.com/api/vod/search?genre='+ $scope.SeleccionGenero;
+            $http.get(url).then(function (res) {
+                //console.log(res.data.response);
+                $scope.peliculas = res.data.response;
+            });
+        }
+    }
+    
+    );
+</script>
+</body>
+</html-->
+
+<!DOCTYPE html>
+<html ng-app="sampleApp">
+<head>
+  <meta charset="UTF-8">
+  <title>Movies</title>
+  <link rel="stylesheet" href="css/bootstrap.css"/>
+</head>
+<body ng-controller="ListaControl">
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+<script src="lib/bootstrap.js"></script>
+
+<h1>Lista de generos</h1>
+<select name="movies2" id="movies2" ng-model="SeleccionGenero" ng-change="Cambio()" ng-options="x.slug as x.name for x in genero">
+  <option value="">Seleccione</option>
+</select>
+{{Seleccionado}}
+
+<h1>Movies</h1>
+<table class="table table-striped">
+  <thead>
+    <tr> <th>Titulo</th><th>Descripcion</th><th>Imagen</th><th></th> </tr> 
+  </thead>
+  <tbody>
+    <!--tr>
+      <td>l</td><td>l</td><td>Movie 1</td>
+      <td><a href="#!Movie/1">Movie details</a></td>
+    </tr-->
+    <tr ng-repeat="movie in peliculas">
+      <td>{{movie.title}}</td><td>{{movie.description}}</td><td><img src="{{movie.poster.url}}" width="150" height="200"/></td>
+      <td><a href="#!Movie/{{movie.id}}">Movie details</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<div ng-view></div>
+
+<script>
+var sampleApp = angular.module('sampleApp', ['ngRoute']);
+
+sampleApp.config(['$routeProvider', function($routeProvider) {
+  $routeProvider.when('/Movie/:movieId', {
+    templateUrl: 'movie.html',
+    controller: 'MovController'
+  });
+}]);
+
+sampleApp.controller('MovController', ['$scope', '$routeParams', function($scope, $routeParams) {
+  $scope.movieid = $routeParams.movieId;
+}]);
+
+sampleApp.controller('ListaControl', ['$scope', '$http', function($scope, $http) {
+  var url = "http://api.filmon.com/api/vod/genres";
+
+  $http.get(url).then(function(response) {
+    $scope.genero = response.data.response;
+  });
+
+  $scope.Cambio = function() {
+    $scope.Seleccionado = $scope.SeleccionGenero;
+    var url = 'http://api.filmon.com/api/vod/search?genre=' + $scope.SeleccionGenero;
+
+    $http.get(url).then(function(res) {
+      $scope.peliculas = res.data.response;
+    });
+  };
+}]);
+</script>
+
+</body>
+</html>
