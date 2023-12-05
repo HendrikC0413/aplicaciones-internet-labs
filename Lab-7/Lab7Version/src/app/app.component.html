@@ -1,6 +1,42 @@
 <div *ngIf="movies!=null; else espera">
-  <select name="pel" id="pel">
+  <select name="pel" id="pel" (change)="onChange($any($event.target).value)">
     <option  *ngFor="let movie of movies.response" value="{{movie.slug}}">{{movie.name}}</option>
   </select>
 </div>
-<ng-template #espera>Esperando datos...</ng-template>
+<ng-template #espera>Esperando...</ng-template>
+
+<div *ngIf="pelicual!=null; else esperaTabla">
+  <table border="1">
+    <tr>
+      <td>Codigo</td><td>Titulo</td><td>Descripcion</td><td>Poster</td>
+    </tr>
+    <tr *ngFor="let pel of pelicual.response">
+      <td><button type="button" (click)="DetallePelicula(pel.original_id)" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        Detalles
+      </button></td>
+      <td>{{pel.title}}</td>
+      <td>{{pel.description}}</td>
+      <td><img src="{{pel.poster.url}}" class="img-rounded" width="50" height="60"></td>
+    </tr>
+  </table>
+</div>
+<ng-template #esperaTabla>Seleccione genero...</ng-template>
+
+<div *ngIf="mov!=null; else espera">
+  <!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">{{mov.response.title}}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        {{mov.response.description}}
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -11,4 +11,12 @@ export class WebsService {
   retornar(){
     return this.http.get("http://api.filmon.com/api/vod/genres");
   }
+
+  ObtenerPeliculas(valor:any){
+    return this.http.get("http://api.filmon.com/api/vod/search?genre="+valor);
+  }
+
+  ObtenerDetalle(valor:any){
+    return this.http.get("http://api.filmon.com/api/vod/movie?id="+valor);
+  }
 }
